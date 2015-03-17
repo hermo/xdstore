@@ -1,0 +1,42 @@
+{
+  "name": "xdstore",
+  "version": "0.1.0",
+  "description": "Cross-domain storage",
+  "main": "src/xdstore.js",
+  "scripts": {
+    "clean": "rimraf dist/*",
+    "prebuild": "npm run clean -s",
+    "build:debug": "browserify -d --s xdstore src/xdstore.js -o dist/xdstore.js",
+    "build:production": "browserify -t stripify --s xdstore src/xdstore.js -o dist/xdstore.js",
+    "build:minify": "uglifyjs dist/xdstore.js -cm -o dist/xdstore.min.js",
+    "build": "npm run build:production && npm run build:minify",
+    "dist": "npm run clean && npm run build",
+    "watch": "watchify src/xdstore.js -d --s xdstore -o dist/xdstore.js -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hermo/xdstore"
+  },
+  "keywords": [
+    "cross-domain",
+    "localstorage",
+    "store2",
+    "cookie-fallback"
+  ],
+  "author": "Mirko Grönroos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hermo/xdstore/issues"
+  },
+  "homepage": "https://github.com/hermo/xdstore",
+  "dependencies": {
+    "store2": "^2.2.0"
+  },
+  "devDependencies": {
+    "browserify": "^9.0.3",
+    "rimraf": "^2.3.2",
+    "stripify": "^3.0.0",
+    "uglify-js": "^2.4.17",
+    "watchify": "^2.4.0"
+  }
+}
