@@ -267,9 +267,18 @@ function xdstore(userConfig) {
     }, config.permission)
   }
 
+
   function onMessage(event) {
-    if (event.origin !== '*' && event.origin !== 'null' && event.origin !== config.permission) {
-      return 
+    if (config.permission instanceof RegExp) {
+      if (!event.origin.match(config.permission)) {
+        
+        return
+      }
+    } else {
+      if (event.origin !== '*' && event.origin !== 'null' && event.origin !== config.permission) {
+        
+        return
+      }
     }
 
     var request = event.data
