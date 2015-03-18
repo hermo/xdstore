@@ -232,9 +232,10 @@ function xdstore(userConfig) {
 
   var config = {
     target: userConfig.target,
+    targetUrl: userConfig.targetUrl,
     onReady: userConfig.onReady || function(){},
     namespace: userConfig.namespace || 'xdstore',
-    permission: userConfig.permission || '*',
+    allowOrigin: userConfig.allowOrigin || '*',
     instance: Math.random().toString(36).substr(2, 9),
     messageId: 0
   }
@@ -264,18 +265,18 @@ function xdstore(userConfig) {
       id: id || nextMessageId(),
       name: name,
       data: data
-    }, config.permission)
+    }, config.targetUrl)
   }
 
 
   function onMessage(event) {
-    if (config.permission instanceof RegExp) {
-      if (!event.origin.match(config.permission)) {
+    if (config.allowOrigin instanceof RegExp) {
+      if (!event.origin.match(config.allowOrigin)) {
         
         return
       }
     } else {
-      if (event.origin !== '*' && event.origin !== 'null' && event.origin !== config.permission) {
+      if (event.origin !== '*' && event.origin !== 'null' && event.origin !== config.allowOrigin) {
         
         return
       }

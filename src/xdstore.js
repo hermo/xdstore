@@ -8,9 +8,10 @@ function xdstore(userConfig) {
 
   var config = {
     target: userConfig.target,
+    targetUrl: userConfig.targetUrl,
     onReady: userConfig.onReady || function(){},
     namespace: userConfig.namespace || 'xdstore',
-    permission: userConfig.permission || '*',
+    allowOrigin: userConfig.allowOrigin || '*',
     instance: Math.random().toString(36).substr(2, 9),
     messageId: 0
   }
@@ -40,19 +41,19 @@ function xdstore(userConfig) {
       id: id || nextMessageId(),
       name: name,
       data: data
-    }, config.permission)
+    }, config.targetUrl)
   }
 
 
   function onMessage(event) {
-    if (config.permission instanceof RegExp) {
-      if (!event.origin.match(config.permission)) {
-        console.warn('[xdstore] origin mismatch', 'origin=', event.origin,  'expected(re)=', config.permission)
+    if (config.allowOrigin instanceof RegExp) {
+      if (!event.origin.match(config.allowOrigin)) {
+        console.warn('[xdstore] origin mismatch', 'origin=', event.origin,  'expected(re)=', config.allowOrigin)
         return
       }
     } else {
-      if (event.origin !== '*' && event.origin !== 'null' && event.origin !== config.permission) {
-        console.warn('[xdstore] origin mismatch', 'origin=', event.origin,  'expected=', config.permission)
+      if (event.origin !== '*' && event.origin !== 'null' && event.origin !== config.allowOrigin) {
+        console.warn('[xdstore] origin mismatch', 'origin=', event.origin,  'expected=', config.allowOrigin)
         return
       }
     }
