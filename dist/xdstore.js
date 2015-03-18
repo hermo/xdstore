@@ -227,7 +227,7 @@ var store = require('store2')
 function xdstore(userConfig) {
   if (!userConfig.target) {
     
-    return { set: function(){}, get: function(){} }
+    return { set: function(){}, get: function(){}, remove: function(){} }
   }
 
   var config = {
@@ -246,13 +246,16 @@ function xdstore(userConfig) {
     },
     _get_: function(options, callback) {
       callback(null, store.get(options.key))
+    },
+    _remove_: function(options, callback) {
+      callback(null, store.remove(options.key))
     }
   }
 
   var callbacks = {}
 
   function nextMessageId() {
-    return config.instance+'-'+(config.messageId+++1)
+    return config.instance + '-' + (config.messageId+++1)
   }
 
   function sendMessage(name, data, id) {
@@ -282,7 +285,7 @@ function xdstore(userConfig) {
 
     if (methods[request.name]) {
       methods[request.name](request.data, function(error, data) {
-        sendMessage('_callback_'+request.name, {error: error, data: data}, request.id)
+        sendMessage('_callback_' + request.name, {error: error, data: data}, request.id)
       })
     }
 
@@ -314,6 +317,14 @@ function xdstore(userConfig) {
         callbacks[messageId] = callback
       }
       sendMessage('_get_', {key: key}, messageId)
+    },
+    remove: function(key, callback) {
+      var messageId = nextMessageId()
+
+      if (callback) {
+        callbacks[messageId] = callback
+      }
+      sendMessage('_remove_', {key: key}, messageId)
     }
   }
 }

@@ -3,7 +3,7 @@ var store = require('store2')
 function xdstore(userConfig) {
   if (!userConfig.target) {
     console.warn('[xdstore] No target window found!')
-    return { set: function(){}, get: function(){} }
+    return { set: function(){}, get: function(){}, remove: function(){} }
   }
 
   var config = {
@@ -22,6 +22,9 @@ function xdstore(userConfig) {
     },
     _get_: function(options, callback) {
       callback(null, store.get(options.key))
+    },
+    _remove_: function(options, callback) {
+      callback(null, store.remove(options.key))
     }
   }
 
@@ -90,6 +93,14 @@ function xdstore(userConfig) {
         callbacks[messageId] = callback
       }
       sendMessage('_get_', {key: key}, messageId)
+    },
+    remove: function(key, callback) {
+      var messageId = nextMessageId()
+
+      if (callback) {
+        callbacks[messageId] = callback
+      }
+      sendMessage('_remove_', {key: key}, messageId)
     }
   }
 }
