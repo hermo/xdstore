@@ -1,6 +1,6 @@
 {
   "name": "xdstore",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Cross-domain storage",
   "main": "dist/xdstore.js",
   "scripts": {
