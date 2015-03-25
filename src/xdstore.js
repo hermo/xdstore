@@ -1,5 +1,24 @@
 var store = require('store2')
 
+// Check that localStorage really works on the current browser
+var localStorageWorks = (function() {
+  try {
+    store.set('_sane', 1)
+    if (store.get('_sane') === 1) {
+      store.remove('_sane')
+      return true
+
+    } else {
+      return false
+    }
+  } catch(e) {
+    return false
+  }
+})()
+
+var cook = require('./cookiestore.js')
+store = cook(window.document, store, { forceCookie: !localStorageWorks })
+
 function xdstore(userConfig) {
   if (!userConfig.target) {
     console.warn('[xdstore] No target window found!')
@@ -35,6 +54,7 @@ function xdstore(userConfig) {
     return config.instance + '-' + (config.messageId+++1)
   }
 
+  // TODO: IE8 doesn't support objects
   function sendMessage(name, data, id) {
     config.target.postMessage({
       namespace: config.namespace,

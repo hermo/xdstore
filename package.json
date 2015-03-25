@@ -2,7 +2,7 @@
   "name": "xdstore",
   "version": "0.4.0",
   "description": "Cross-domain storage",
-  "main": "dist/xdstore.js",
+  "main": "src/xdstore.js",
   "scripts": {
     "clean": "rimraf dist/*",
     "prebuild": "npm run clean -s",
