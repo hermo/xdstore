@@ -309,6 +309,11 @@ var localStorageWorks = (function() {
 var cook = require('./cookiestore.js')
 store = cook(window.document, store, { forceCookie: !localStorageWorks })
 
+module.exports = store
+
+},{"./cookiestore.js":2,"store2":1}],4:[function(require,module,exports){
+var store = require('./store')
+
 function xdstore(userConfig) {
   if (!userConfig.target) {
     
@@ -427,5 +432,5 @@ function xdstore(userConfig) {
 
 module.exports = xdstore
 
-},{"./cookiestore.js":2,"store2":1}]},{},[3])(3)
+},{"./store":3}]},{},[4])(4)
 });
