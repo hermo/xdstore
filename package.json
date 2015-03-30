@@ -4,6 +4,7 @@
   "description": "Cross-domain storage",
   "main": "src/xdstore.js",
   "scripts": {
+    "test": "intern-runner config=tests/intern",
     "clean": "rimraf dist/*",
     "prebuild": "npm run clean -s",
     "build:debug": "browserify -d --s xdstore src/xdstore.js -o dist/xdstore.js",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "browserify": "^9.0.3",
+    "intern": "^2.2.2",
     "rimraf": "^2.3.2",
     "stripify": "^3.0.0",
     "uglify-js": "^2.4.17",

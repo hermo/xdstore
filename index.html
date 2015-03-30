@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>xdstore test</title>
+    <script src="dist/xdstore.js"></script>
+  </head>
+  <body>
+    <h1 id="title">xdstore test</h1>
+    <iframe id="storage" src="tests/iframe.html" style="width: 1px; height: 1px; visibility: hidden"></iframe>
+
+    <input type="text" id="keyInput" />
+    <input type="text" id="valInput" />
+    <input type="button" value="set" id="setBtn" />
+    <input type="button" value="get" id="getBtn" />
+
+    <script type="text/javascript">
+(function() {
+  var vkRe = new RegExp('https?:\/\/'+ location.host + '(\/|$)')
+    var targetUrl = location.protocol + '//' + location.host + '/tests/iframe.html';
+  // console.log('client target', targetUrl)
+
+  var xds = xdstore({
+    target: document.getElementById('storage').contentWindow,
+    targetUrl: targetUrl,
+    allowOrigin: vkRe,
+    onReady: function() {
+      console.log('client connected')
+    }
+  })
+
+  window.xds = xds;
+
+
+  var keyInput = document.getElementById('keyInput'),
+  valInput = document.getElementById('valInput'),
+    setBtn = document.getElementById('setBtn'),
+    getBtn = document.getElementById('getBtn');
+
+  getBtn.addEventListener('click', function() {
+    valInput.className = 'js-processing'
+      xds.get(keyInput.value, function(error, value) {
+        if (error) throw error
+        valInput.value = value;
+        valInput.className = 'js-finished'
+      })
+  })
+  setBtn.addEventListener('click', function() {
+    var value = valInput.value;
+    valInput.className = 'js-processing'
+      xds.set(keyInput.value, value, function(error) {
+        if (error) throw error
+        valInput.className = 'js-finished'
+        valInput.value = ''
+      })
+  })
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.className = 'js-loaded'
+  })
+
+})();
+    </script>
+  </body>
+</html>

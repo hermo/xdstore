@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en" data-framework="jquery">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>xdstore test iframe</title>
+    <script src="../dist/xdstore.js"></script>
+  </head>
+  <body>
+    <h1 id="title">xdstore test iframe</h1>
+    <script type="text/javascript">
+(function() {
+
+    var vkRe = new RegExp('https?:\/\/'+ location.host + '(\/|$)')
+    var targetUrl = location.protocol + '//' + location.host;
+    // console.log('server target', targetUrl)
+
+    var xds = xdstore({
+        target: parent,
+        targetUrl: targetUrl,
+        allowOrigin: vkRe,
+        onReady: function(){
+          console.log('server connected')
+        }
+    })
+})();
+    </script>
+    <h1 id="herp">Iframe!</h1>
+  </body>
+</html>
+
