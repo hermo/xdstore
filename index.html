@@ -53,6 +53,7 @@
     valInput.className = 'js-processing'
       xds.get(keyInput.value, function(error, value) {
         if (error) throw error
+        if (value === null) { value = '' }
         valInput.value = value;
         valInput.className = 'js-finished'
       })
