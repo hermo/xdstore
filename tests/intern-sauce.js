@@ -20,8 +20,8 @@ define({
   maxConcurrency: 3,
   tunnel: 'SauceLabsTunnel',
 
-  reporters: [ 'pretty' ],
+  reporters: [ 'console' ],
   functionalSuites: [ 'tests/functional/xdstore' ],
 
-  excludeInstrumentation: /^tests|node_modules\//
+  excludeInstrumentation: /./
 });
