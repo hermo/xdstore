@@ -35,14 +35,13 @@ function xdstore(userConfig) {
     return config.instance + '-' + (config.messageId+++1)
   }
 
-  // TODO: IE8 doesn't support objects
   function sendMessage(name, data, id) {
-    config.target.postMessage({
+    config.target.postMessage(JSON.stringify({
       namespace: config.namespace,
       id: id || nextMessageId(),
       name: name,
       data: data
-    }, config.targetUrl)
+    }), config.targetUrl)
   }
 
 
@@ -59,7 +58,13 @@ function xdstore(userConfig) {
       }
     }
 
-    var request = event.data
+    try {
+      var request = JSON.parse(event.data)
+    } catch(e)
+    {
+      return // No action, invalid json
+    }
+
     if (request.namespace !== config.namespace) { return }
 
     if (request.name === '_init_') {

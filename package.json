@@ -4,8 +4,8 @@
   "description": "Cross-domain storage",
   "main": "src/xdstore.js",
   "scripts": {
-    "test": "intern-runner config=tests/intern",
-    "test-sauce": "intern-runner config=tests/intern-sauce",
+    "test": "npm run build:production && intern-runner config=tests/intern",
+    "test-sauce": "npm run build:production && intern-runner config=tests/intern-sauce",
     "clean": "rimraf dist/*",
     "prebuild": "npm run clean -s",
     "build:debug": "browserify -d --s xdstore src/xdstore.js -o dist/xdstore.js",

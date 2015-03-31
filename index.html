@@ -18,27 +18,38 @@
     <script type="text/javascript">
 (function() {
   var vkRe = new RegExp('https?:\/\/'+ location.host + '(\/|$)')
-    var targetUrl = location.protocol + '//' + location.host + '/tests/iframe.html';
+  var targetUrl = location.protocol + '//' + location.host + '/tests/iframe.html'
   // console.log('client target', targetUrl)
+
+  var click = (function() {
+    if (window.addEventListener) {
+      return function(target, fn) {
+        target.addEventListener('click', fn)
+      }
+    } else {
+      return function(target, fn) {
+        target.attachEvent('onclick', fn)
+      }
+    }
+  })()
 
   var xds = xdstore({
     target: document.getElementById('storage').contentWindow,
     targetUrl: targetUrl,
     allowOrigin: vkRe,
     onReady: function() {
-      console.log('client connected')
+//      console.log('client connected')
     }
   })
 
-  window.xds = xds;
-
+//  window.xds = xds;
 
   var keyInput = document.getElementById('keyInput'),
   valInput = document.getElementById('valInput'),
     setBtn = document.getElementById('setBtn'),
     getBtn = document.getElementById('getBtn');
 
-  getBtn.addEventListener('click', function() {
+  click(getBtn, function() {
     valInput.className = 'js-processing'
       xds.get(keyInput.value, function(error, value) {
         if (error) throw error
@@ -46,7 +57,7 @@
         valInput.className = 'js-finished'
       })
   })
-  setBtn.addEventListener('click', function() {
+  click(setBtn, function() {
     var value = valInput.value;
     valInput.className = 'js-processing'
       xds.set(keyInput.value, value, function(error) {
@@ -56,9 +67,9 @@
       })
   })
 
-  document.addEventListener('DOMContentLoaded', function() {
+  window.onload = function() {
     document.body.className = 'js-loaded'
-  })
+  }
 
 })();
     </script>

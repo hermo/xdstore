@@ -10,22 +10,20 @@
     <h1 id="title">xdstore test iframe</h1>
     <script type="text/javascript">
 (function() {
+  var allowRe = new RegExp('https?:\/\/'+ location.host + '(\/|$)')
+  var targetUrl = location.protocol + '//' + location.host
+  // console.log('server target', targetUrl)
 
-    var vkRe = new RegExp('https?:\/\/'+ location.host + '(\/|$)')
-    var targetUrl = location.protocol + '//' + location.host;
-    // console.log('server target', targetUrl)
-
-    var xds = xdstore({
-        target: parent,
-        targetUrl: targetUrl,
-        allowOrigin: vkRe,
-        onReady: function(){
-          console.log('server connected')
-        }
-    })
+  var xds = xdstore({
+    target: parent,
+    targetUrl: targetUrl,
+    allowOrigin: allowRe,
+    onReady: function(){
+      // console.log('server connected')
+    }
+  })
 })();
     </script>
-    <h1 id="herp">Iframe!</h1>
   </body>
 </html>
 
