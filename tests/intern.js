@@ -19,7 +19,7 @@ define({
     { browserName: 'safari', version: '8', platform: 'OS X 10.10' }
   ],
 
-  maxConcurrency: 1,
+  maxConcurrency: 3,
 
   reporters: [ 'pretty' ],
   functionalSuites: [ 'tests/functional/xdstore' ],
