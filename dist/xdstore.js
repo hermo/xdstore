@@ -401,7 +401,11 @@ function xdstore(userConfig) {
     }
   }
 
-  window.addEventListener('message', onMessage, false)
+  if (window.addEventListener) {
+    window.addEventListener('message', onMessage, false)
+  } else {
+    window.attachEvent('onmessage', onMessage)
+  }
 
   setTimeout(function() {
     sendMessage('_init_', 'PING')
