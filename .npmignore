@@ -1,1 +1,5 @@
 .editorconfig
+*.log
+.travis.yml
+/html-report/
+/tests/
