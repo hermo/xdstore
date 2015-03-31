@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+- '0.10'
+script: node_modules/.bin/intern-runner config=tests/intern-sauce
+env:
+  global:
+  - secure: FjKZfnHc5mQk3uVfROyzWttI4KXyLD7ZetDIYp3V79lphWCUUK//EfMG+IlU5VS5BZeVrA3mbDRd08TjFkdUuAEyczHoV3Z+ywW3gFgIeXQ0pfpOGZhLa9yHeZ7xVM2o86zl69vvLpVxlA0TkzIl1ZEx4zKTz+1eGBYy3jmx6yc=
+  - secure: cJn8YzQ+KOVk1t639bkevZ0jyCQPEXlj/thcQxWuQr+W4Svb/ETtjqTwZu/OKv1qmAFaJnQpNx4MpfqGN1dss+GMXjtuOuXv13eum760tIFAoy9KNMvrpaZbXSP/L+/PwnLidClTpTQAAJSzUissw6orVIX6D1Nse41GQ5sfgkQ=
