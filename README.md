@@ -30,7 +30,15 @@ A working [Homebrew](http://brew.sh/) installation is required.
 
 Install `selenium-server-standalone`.
 
+To run tests you also need to install `chromedriver` and `phantomjs`.
+
 Run Selenium by running `selenium-server -p 4444`.
+
+
+### Running tests using Sauce labs
+
+Run `SAUCE_USERNAME=XXXX SAUCE_ACCESS_KEY=XXXX npm run test-sauce`.
+You obviously need to have a saucelabs account to do this.
 
 ## Status
 
