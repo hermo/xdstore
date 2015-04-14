@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.7.1] - 2015-04-14
+### Changed
+- Always use cookie fallback with Safari as it seems to block localStorage
+  when used from an iframe in another host.
+
 ## [0.7.0] - 2015-03-31
 ### Added
 - IE8 support
@@ -22,3 +27,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 [unreleased]: https://github.com/hermo/xdstore/compare/v0.6.0...HEAD
 [0.6.0]: https://github.com/hermo/xdstore/compare/v0.5.0...v0.6.0
 [0.7.0]: https://github.com/hermo/xdstore/compare/v0.6.0...v0.7.0
+[0.7.1]: https://github.com/hermo/xdstore/compare/v0.7.0...v0.7.1
