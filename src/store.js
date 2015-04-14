@@ -2,12 +2,15 @@ var store = require('store2')
 
 // Check that localStorage really works on the current browser
 var localStorageWorks = (function() {
+  var isPhantom = navigator.userAgent.indexOf('Phantom') !== -1
+  var isChrome = navigator.userAgent.indexOf('Chrome') !== -1
   // Safari / MobileSafari, by default, seem to block localStorage even
   // when used with an iframe from a different host so just give up and use
   // cookies instead.
-  if (navigator.userAgent.indexOf('Safari') !== -1) {
+  if (!isChrome && !isPhantom && navigator.userAgent.indexOf('Safari') !== -1) {
     return false;
   }
+
   try {
     store.set('_sane', 1)
     if (store.get('_sane') === 1) {
