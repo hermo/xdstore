@@ -259,7 +259,7 @@ module.exports = function(document, store, options) {
   }
 
   if (store.isFake() || options.forceCookie) {
-    
+    //console.log('fake env detected, using cookie fallback')
     var area,
       date = new Date(),
       key = 'xdstorelocal',
@@ -278,7 +278,7 @@ module.exports = function(document, store, options) {
     }
 
     area = create('cookie', items, function() {
-      document.cookie = key+"="+JSON.stringify(this.items)+"; expires="+date+"; path=/"
+      document.cookie = key+"="+JSON.stringify(this.items)+"; expires="+date+"; path=/" + (options.secure ? ';secure' : '')
     })
 
     store._area = _.areas.local = area
@@ -292,12 +292,15 @@ var store = require('store2')
 
 // Check that localStorage really works on the current browser
 var localStorageWorks = (function() {
+  var isPhantom = navigator.userAgent.indexOf('Phantom') !== -1
+  var isChrome = navigator.userAgent.indexOf('Chrome') !== -1
   // Safari / MobileSafari, by default, seem to block localStorage even
   // when used with an iframe from a different host so just give up and use
   // cookies instead.
-  if (navigator.userAgent.indexOf('Safari') !== -1) {
+  if (!isChrome && !isPhantom && navigator.userAgent.indexOf('Safari') !== -1) {
     return false;
   }
+
   try {
     store.set('_sane', 1)
     if (store.get('_sane') === 1) {
@@ -312,8 +315,11 @@ var localStorageWorks = (function() {
   }
 })()
 
+
 var cook = require('./cookiestore.js')
-store = cook(window.document, store, { forceCookie: !localStorageWorks })
+store = cook(window.document, store, {
+  forceCookie: !localStorageWorks,
+  secure: location.protocol === 'https:' })
 
 module.exports = store
 
