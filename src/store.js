@@ -23,6 +23,6 @@ var localStorageWorks = (function() {
 })()
 
 var cook = require('./cookiestore.js')
-store = cook(window.document, store, { forceCookie: !localStorageWorks })
+store = cook(window.document, store, { forceCookie: !localStorageWorks, secure: true })
 
 module.exports = store

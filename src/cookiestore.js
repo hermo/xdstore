@@ -54,7 +54,7 @@ module.exports = function(document, store, options) {
     }
 
     area = create('cookie', items, function() {
-      document.cookie = key+"="+JSON.stringify(this.items)+"; expires="+date+"; path=/"
+      document.cookie = key+"="+JSON.stringify(this.items)+"; expires="+date+"; path=/" + (options.secure ? ';secure' : '')
     })
 
     store._area = _.areas.local = area
