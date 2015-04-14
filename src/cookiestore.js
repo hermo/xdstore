@@ -35,7 +35,7 @@ module.exports = function(document, store, options) {
   }
 
   if (store.isFake() || options.forceCookie) {
-    console.log('fake env detected, using cookie fallback')
+    //console.log('fake env detected, using cookie fallback')
     var area,
       date = new Date(),
       key = 'xdstorelocal',
