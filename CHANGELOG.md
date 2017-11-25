@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.8.0] - 2017-11-25
+### Changed
+- Removed Safari localStorage fallback by default
+
 ## [0.7.3] - 2015-04-14
 ### Added
 - Use secure cookie fallback when served via HTTPS
