@@ -1,9 +1,9 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.xdstore = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! store2 - v2.2.0 - 2015-02-02
-* Copyright (c) 2015 Nathan Bubna; Licensed MIT, GPL */
+/*! store2 - v2.5.9 - 2017-10-26
+* Copyright (c) 2017 Nathan Bubna; Licensed (MIT OR GPL-3.0) */
 ;(function(window, define) {
     var _ = {
-        version: "2.2.0",
+        version: "2.5.9",
         areas: {},
         apis: {},
 
@@ -42,13 +42,22 @@
         Store: function(id, area, namespace) {
             var store = _.inherit(_.storeAPI, function(key, data, overwrite) {
                 if (arguments.length === 0){ return store.getAll(); }
+                if (typeof data === "function"){ return store.transact(key, data, overwrite); }// fn=data, alt=overwrite
                 if (data !== undefined){ return store.set(key, data, overwrite); }
-                if (typeof key === "string"){ return store.get(key); }
+                if (typeof key === "string" || typeof key === "number"){ return store.get(key); }
                 if (!key){ return store.clear(); }
                 return store.setAll(key, data);// overwrite=data, data=key
             });
             store._id = id;
-            store._area = area || _.inherit(_.storageAPI, { items: {}, name: 'fake' });
+            try {
+                var testKey = '_safariPrivate_';
+                area.setItem(testKey, 'sucks');
+                store._area = area;
+                area.removeItem(testKey);
+            } catch (e) {}
+            if (!store._area) {
+                store._area = _.inherit(_.storageAPI, { items: {}, name: 'fake' });
+            }
             store._ns = namespace || '';
             if (!_.areas[id]) {
                 _.areas[id] = store._area;
@@ -93,17 +102,17 @@
                 return !!(this._in(key) in this._area);
             },
             size: function(){ return this.keys().length; },
-            each: function(fn, and) {
+            each: function(fn, _and) {// _and is purely for internal use (see keys())
                 for (var i=0, m=_.length(this._area); i<m; i++) {
                     var key = this._out(_.key(this._area, i));
                     if (key !== undefined) {
-                        if (fn.call(this, key, and || this.get(key)) === false) {
+                        if (fn.call(this, key, _and || this.get(key)) === false) {
                             break;
                         }
                     }
                     if (m > _.length(this._area)) { m--; i--; }// in case of removeItem
                 }
-                return and || this;
+                return _and || this;
             },
             keys: function() {
                 return this.each(function(k, list){ list.push(k); }, []);
@@ -114,6 +123,12 @@
             },
             getAll: function() {
                 return this.each(function(k, all){ all[k] = this.get(k); }, {});
+            },
+            transact: function(key, fn, alt) {
+                var val = this.get(key, alt),
+                    ret = fn(val);
+                this.set(key, ret === undefined ? val : ret);
+                return this;
             },
             set: function(key, data, overwrite) {
                 var d = this.get(key);
@@ -194,13 +209,11 @@
                 }
             },
             getItem: function(k){ return this.has(k) ? this.items[k] : null; },
-            clear: function(){ for (var k in this.list){ this.removeItem(k); } },
+            clear: function(){ for (var k in this.items){ this.removeItem(k); } },
             toString: function(){ return this.length+' items in '+this.name+'Storage'; }
         }// end _.storageAPI
     };
 
-    // setup the primary store fn
-    if (window.store){ _.conflict = window.store; }
     var store =
         // safely set this up (throws error in IE10/32bit mode for local files)
         _.Store("local", (function(){try{ return localStorage; }catch(e){}})());
@@ -210,16 +223,18 @@
     store.area("session", (function(){try{ return sessionStorage; }catch(e){}})());
 
     if (typeof define === 'function' && define.amd !== undefined) {
-        define(function () {
+        define('store2', [], function () {
             return store;
         });
     } else if (typeof module !== 'undefined' && module.exports) {
         module.exports = store;
     } else {
+        // expose the primary store fn to the global object and save conflicts
+        if (window.store){ _.conflict = window.store; }
         window.store = store;
     }
 
-})(window, window.define);
+})(this, this.define);
 
 },{}],2:[function(require,module,exports){
 /**
@@ -294,12 +309,6 @@ var store = require('store2')
 var localStorageWorks = (function() {
   var isPhantom = navigator.userAgent.indexOf('Phantom') !== -1
   var isChrome = navigator.userAgent.indexOf('Chrome') !== -1
-  // Safari / MobileSafari, by default, seem to block localStorage even
-  // when used with an iframe from a different host so just give up and use
-  // cookies instead.
-  if (!isChrome && !isPhantom && navigator.userAgent.indexOf('Safari') !== -1) {
-    return false;
-  }
 
   try {
     store.set('_sane', 1)
